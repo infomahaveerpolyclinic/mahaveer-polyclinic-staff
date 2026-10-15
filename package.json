@@ -1,0 +1,23 @@
+{
+  "name": "mahaveer-staff-website",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12 <25"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "node scripts/headers.mjs && vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 5174 --strictPort"
+  },
+  "dependencies": {
+    "lucide-react": "1.56.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "6.1.2",
+    "vite": "8.3.4"
+  }
+}

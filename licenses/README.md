@@ -1,0 +1,1 @@
+Bundled runtime licenses. Local font licenses are in public/fonts. Additional dependency notices are available in each installed npm package. Original project-specific code, copy and image assets were created for Mahaveer Poly Clinic.

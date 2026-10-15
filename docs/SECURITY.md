@@ -1,0 +1,16 @@
+# Security controls and review boundaries
+
+- Server-side role checks and object ownership enforce patient isolation and assigned-clinician access. Patient, staff and owner pages do not grant authority by hiding buttons.
+- Random session tokens are stored as hashes in PostgreSQL; browser cookies are HttpOnly, Secure in production, expire after eight hours, and are protected by CSRF tokens and exact origin checks on mutations. Passwords use salted scrypt. Temporary staff passwords require replacement.
+- Patient registration and account recovery require a short-lived, attempt-limited WhatsApp OTP. Creating an online account links an existing patient only when verified phone, name and date of birth match. Staff-created medical records are not open guest accounts.
+- PostgreSQL-backed API, sign-in, OTP and file-upload limits provide shared enforcement across API processes. Additional IP limits protect public forms. Limits reduce abuse; infrastructure should still enforce connection/body limits at ingress.
+- Queries use parameters. Zod validates values and limits lengths/amounts. React renders patient text as escaped text; no arbitrary HTML form content is rendered. Catalog image URLs accept HTTPS only. User input does not become SQL identifiers or executable markup.
+- Private uploads accept PDF/PNG/JPEG signatures and a 5 MB limit; authorization is checked on download. Files are served as attachments with nosniff, sandbox CSP and no-store. Signature validation is not malware scanning; do not open untrusted files in an unpatched desktop application. Production attachment scanning is an additional deployment integration, not included here.
+- Database TLS verifies certificates and hostname. Production rejects missing database URLs, disabled database TLS, missing/weak auth secrets and non-HTTPS origins. Real secrets remain on the backend/worker. API endpoint URLs and Razorpay's public key ID are intentionally public; they are not authentication secrets.
+- Helmet, static-host headers, CSP, frame restrictions, HTTPS and no-store API responses are provided. Vite production source maps are disabled. Deploy dist directories only. Ignore files exclude environment files, credentials, database data and dependencies from source uploads.
+- Supplier stock receipts require a private invoice file and batch metadata. Payments use invoice locks and idempotency keys. Shared daily tokens use an atomic PostgreSQL counter and a day/number unique constraint. Clinical and financial actions write audit records.
+- Reports require full payment and independent lab review. Signed consultation notes and released reports are locked. Pharmacy dispensing checks unexpired available stock and prescriptions; delivery cannot advance before payment.
+
+The checks in VALIDATION.md are not a penetration test or a guarantee against compromise. Live infrastructure, actual PostgreSQL concurrency, credential management, provider setup, browser behavior and clinic operating procedures still require deployment acceptance. Maintain backups and promptly install tested security updates.
+
+Technical reference: [OWASP REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html).
