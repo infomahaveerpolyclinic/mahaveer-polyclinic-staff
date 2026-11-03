@@ -67,8 +67,8 @@ function Confirm({ title, children, onConfirm, onClose, busy }) {
   );
 }
 export async function upload(file, purpose, patientId) {
-  if (!file || file.size > 5242880)
-    throw new Error("Upload a PDF, JPEG or PNG up to 5 MB.");
+  if (!file || file.size > 2097152)
+    throw new Error("Upload a PDF, JPEG or PNG up to 2 MB.");
   const data = await new Promise((resolve, reject) => {
     const r = new FileReader();
     r.onload = () => resolve(r.result.split(",")[1]);
@@ -974,7 +974,7 @@ export function PurchaseForm({ catalog, onClose, onSaved }) {
             defaultValue={today()}
           />
         </div>
-        <Field label="Supplier bill (required PDF, PNG or JPEG, up to 5 MB)">
+        <Field label="Supplier bill (required PDF, PNG or JPEG, up to 2 MB)">
           <input
             name="document"
             type="file"

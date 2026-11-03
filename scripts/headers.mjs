@@ -9,7 +9,7 @@ const csp=["default-src 'self'","base-uri 'self'","object-src 'none'","frame-anc
 const headers={'Content-Security-Policy':csp,'X-Content-Type-Options':'nosniff','X-Frame-Options':'DENY','Referrer-Policy':'strict-origin-when-cross-origin','Permissions-Policy':'camera=(), microphone=(), geolocation=()','Strict-Transport-Security':'max-age=31536000'};
 mkdirSync('public',{recursive:true});
 writeFileSync('public/_headers','/*\n'+Object.entries(headers).map(([k,v])=>'  '+k+': '+v).join('\n')+'\n/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n');
-writeFileSync('vercel.json',JSON.stringify({headers:[{source:'/(.*)',headers:Object.entries(headers).map(([key,value])=>({key,value}))}],rewrites:[{source:'/((?!api/).*)',destination:'/index.html'}]},null,2)+'\n');
+writeFileSync('vercel.json',JSON.stringify({headers:[{source:'/(.*)',headers:Object.entries(headers).map(([key,value])=>({key,value}))}],rewrites:[{source:'/api/:path*',destination:'https://mahaveer-polyclinic-backend.vercel.app/api/:path*'},{source:'/((?!api/).*)',destination:'/index.html'}]},null,2)+'\n');
 writeFileSync('nginx.conf',`server {
   listen 80;
   server_name _;
